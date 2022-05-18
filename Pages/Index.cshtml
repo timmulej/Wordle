@@ -1,0 +1,72 @@
+﻿@page
+@using Wordle.Models
+@using Wordle.services
+@model Wordle.Pages.IndexModel
+@{
+	ViewData["Title"] = "Wordle";
+}
+
+    <table class="center">
+    @foreach (var word in Model.Wordss)
+    {
+        <tr class="form-group mb-0 align-middle">
+            <td class="label @word.PrviLevel">@word.Prva</td>
+            <td class="label @word.DrugiLevel">@word.Druga</td>
+            <td class="label @word.tretjiLevel">@word.Tretja</td>
+            <td class="label @word.CetrtiLevel">@word.Cetrta</td>
+            <td class="label @word.PetiLevel">@word.Peta</td>
+            <td> @Math.Round(word.ExpectedInformation,2)</td>
+            <td>@Math.Round(word.Information,2)</td>
+        </tr>
+    }
+    </table>
+@if (Model.Status != "Zmagali ste" && Model.Status != "Porazno")
+{
+    <form method="post"  asp-page-handler="Try">
+        <div class="center">
+            <div asp-validation-summary="All"></div>
+        </div>
+        <div class="center">
+            <input type="text" asp-for="Word.Prva" class="short-textbox">
+            <input type="text" asp-for="Word.Druga" class="short-textbox">
+            <input type="text" asp-for="Word.Tretja" class="short-textbox">
+            <input type="text" asp-for="Word.Cetrta" class="short-textbox">
+            <input type="text" asp-for="Word.Peta" class="short-textbox" />
+            <button class="btn btn-primary">Isci</button>
+        </div>
+    </form>
+}
+<div class="text-center">
+    <h1 class="display-4">@Model.Status</h1>
+</div>
+<table class="text-center">
+    <tr class="form-group mb-0 align-middle">
+        @foreach(string crka in Model.abeceda)
+        {
+            @if (Model.Zelene.Contains(crka))
+            {
+                
+                <td class="label Zelena">@crka</td>
+            }
+            else if (Model.Rumene.Contains(crka))
+            {
+                <td class="label Rumena">@crka</td>
+            }
+            else if (Model.Sive.Contains(crka))
+            {
+                <td class="label Siva">@crka</td>
+            }
+            else
+            {
+                 <td class="label Neoznacena">@crka</td>
+            }
+
+        }
+    </tr>
+</table>
+<form method ="post"  asp-page-handler="Hint">
+    <button class="btn btn-danger">Predlagaj besedo</button>
+</form>
+<form method ="post"  asp-page-handler="NewGame">
+    <button class="btn btn-danger">Nova igra</button>
+</form>
